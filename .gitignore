@@ -1,0 +1,52 @@
+# Secrets and local environment files
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.env
+!.env.example
+.aws/
+**/credentials
+**/config.local
+secrets/
+secret/
+*.secret
+*.secrets
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+
+# Python virtual environments and local tooling
+.venv/
+venv/
+env/
+ENV/
+.python-version.local
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local IDE / OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Build outputs and local artifacts
+dist/
+build/
+node_modules/
+*.zip
+*.log
+
+# Terraform state (if IaC experiments are added)
+*.tfstate
+*.tfstate.*
+.terraform/
