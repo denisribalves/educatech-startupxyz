@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self' https://*.amazonaws.com; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Educatech — Seu espaço de documentos</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="config.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#inicio" aria-label="Educatech início"><span class="brand-mark">E</span><span>educatech</span></a>
+    <div class="top-actions"><span id="environment" class="environment" hidden></span><span id="user-email" class="user-email" hidden></span><button id="logout-button" class="button button-outline button-small" hidden>Sair da conta</button></div>
+  </header>
+  <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+  <noscript><div class="notice notice-error" role="alert">Para utilizar o Educatech, habilite JavaScript no navegador. A validação de autenticação e as operações de documentos são realizadas pelos serviços AWS.</div></noscript>
+
+  <main id="auth-view" class="auth-layout">
+    <section class="intro-panel">
+      <div class="eyebrow"><span class="pulse"></span> Plataforma segura de documentos</div>
+      <h1>Seus documentos.<br><span>Organizados e protegidos.</span></h1>
+      <p>Um espaço simples para enviar, consultar e gerenciar seus arquivos com autenticação e autorização na infraestrutura AWS.</p>
+      <div class="feature-list">
+        <div><span class="feature-icon">✓</span><div><strong>Acesso individual</strong><small>Suas operações são vinculadas à sua conta autenticada.</small></div></div>
+        <div><span class="feature-icon">↗</span><div><strong>Armazenamento privado</strong><small>Os arquivos ficam em um bucket S3 sem acesso público.</small></div></div>
+        <div><span class="feature-icon">⌁</span><div><strong>Segurança em camadas</strong><small>Cognito, API Gateway, Lambda e políticas AWS.</small></div></div>
+      </div>
+      <p class="fine-print">Educatech · Ambiente de demonstração</p>
+    </section>
+    <section class="auth-panel">
+      <div class="auth-card">
+        <div class="mobile-brand"><span class="brand-mark">E</span> educatech</div>
+        <div class="auth-heading"><span class="eyebrow" id="auth-eyebrow">BEM-VINDO DE VOLTA</span><h2 id="auth-title">Entre na sua conta</h2><p id="auth-subtitle">Use seu e-mail e senha para continuar.</p></div>
+        <form id="auth-form" novalidate>
+          <div id="auth-fields"></div>
+          <p id="auth-error" class="form-error" role="alert" hidden></p>
+          <button id="auth-submit" class="button button-primary button-block" type="submit">Entrar</button>
+        </form>
+        <div id="auth-links" class="auth-links"></div>
+        <div class="security-note"><span>◈</span><span>Autenticação gerenciada pelo Amazon Cognito. A API valida a sessão antes de executar operações protegidas.</span></div>
+      </div>
+    </section>
+  </main>
+
+  <main id="dashboard-view" class="dashboard" hidden>
+    <section class="welcome-row"><div><div class="eyebrow">ÁREA DE TRABALHO</div><h1>Seus documentos</h1><p>Gerencie seus arquivos em um só lugar.</p></div><button id="refresh-button" class="button button-outline">↻ Atualizar</button></section>
+    <section class="stat-grid" aria-label="Resumo dos documentos"><article class="stat-card"><span class="stat-label">Documentos ativos</span><strong id="stat-active">0</strong><span class="stat-hint">Disponíveis na sua conta</span></article><article class="stat-card"><span class="stat-label">Espaço utilizado</span><strong id="stat-size">0 B</strong><span class="stat-hint">Total dos documentos ativos</span></article><article class="stat-card"><span class="stat-label">Na lixeira</span><strong id="stat-deleted">0</strong><span class="stat-hint">Exclusões lógicas</span></article></section>
+    <section class="content-grid">
+      <article class="panel upload-panel"><div class="panel-heading"><div><h2>Adicionar documentos</h2><p>Selecione ou arraste arquivos para enviar.</p></div><span class="panel-icon">↑</span></div>
+        <label id="drop-zone" class="drop-zone" for="file-input"><span class="upload-symbol">↑</span><strong>Arraste os arquivos até aqui</strong><span>ou <u>procure no seu dispositivo</u></span><small>PDF, PNG, JPG, WEBP ou TIFF · até 4 MB por arquivo</small></label>
+        <input id="file-input" type="file" multiple accept=".pdf,.png,.jpg,.jpeg,.webp,.tif,.tiff,application/pdf,image/png,image/jpeg,image/webp,image/tiff" hidden>
+        <ul id="upload-results" class="upload-results" aria-live="polite"></ul>
+        <p class="fine-print">O navegador pode verificar o arquivo para melhorar a experiência, mas os limites e permissões são aplicados novamente no backend.</p>
+      </article>
+      <article class="panel documents-panel"><div class="panel-heading"><div><h2>Biblioteca</h2><p>Arquivos enviados pela sua conta.</p></div><span class="panel-icon">▤</span></div>
+        <div class="toolbar"><label class="search-box"><span>⌕</span><input id="search-input" type="search" placeholder="Buscar documento…" aria-label="Buscar documento"></label><label class="checkbox-label"><input id="include-deleted" type="checkbox"> Mostrar excluídos</label></div>
+        <div class="table-wrap"><table><thead><tr><th>Documento</th><th>Tamanho</th><th>Data</th><th>Status</th><th>Ações</th></tr></thead><tbody id="document-rows"></tbody></table></div>
+        <div id="empty-state" class="empty-state" hidden><span>▤</span><strong>Nenhum documento encontrado</strong><p>Quando você enviar arquivos, eles aparecerão aqui.</p></div>
+      </article>
+    </section>
+    <details class="diagnostics"><summary>Diagnóstico de conexão</summary><p>Registro técnico das chamadas feitas pelo navegador. Não contém senhas.</p><pre id="api-log">Pronto para conectar à API.</pre></details>
+    <footer class="dashboard-footer">Educatech <span>•</span> Armazenamento privado e acesso autenticado</footer>
+  </main>
+</body>
+</html>
